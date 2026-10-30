@@ -23,6 +23,14 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
+    contact_message = models.ForeignKey(
+        "ContactMessage",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="notifications",
+    )
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Notificación"
@@ -30,3 +38,23 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ContactMessage(models.Model):
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=150)
+    message = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Contact message'
+        verbose_name_plural = 'Contact messages'
+
+    def __str__(self):
+        return f'{self.name} - {self.subject}'

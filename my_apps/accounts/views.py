@@ -131,3 +131,33 @@ def mark_notification_read(request, notification_id):
     notification.save(update_fields=["is_read"])
 
     return redirect("accounts:staff_notifications")
+
+
+@staff_member_required
+def notification_detail(request, pk):
+
+    notification = get_object_or_404(
+        Notification.objects.select_related(
+            "user",
+            "contact_message"
+        ),
+        pk=pk
+    )
+
+    # Mark notification as read
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save(update_fields=["is_read"])
+
+    context = {
+        "notification": notification,
+        "contact_message": notification.contact_message,
+    }
+
+    return render(
+        request,
+        "accounts/notification_detail.html",
+        context
+    )
+
+

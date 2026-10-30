@@ -263,133 +263,104 @@
         <!-- NOTIFICATIONS -->
         <div class="list-group list-group-flush">
 
-            {% for notification in notifications %}
+            
+        {% for notification in notifications %}
 
-                <div class="list-group-item p-4
-                    {% if not notification.is_read %}
-                        bg-body-tertiary
-                    {% endif %}">
+            <div class="list-group-item px-3 py-3
+                {% if not notification.is_read %}
+                    bg-body-tertiary
+                {% endif %}">
 
-                    <div class="d-flex gap-3">
+                <div class="d-flex align-items-start gap-3">
 
-                        <!-- ICON -->
-                        <div class="rounded-3 p-3 flex-shrink-0
-                            {% if notification.notification_type == 'login' %}
-                                bg-primary-subtle text-primary
-                            {% else %}
-                                bg-success-subtle text-success
-                            {% endif %}">
+                    <!-- ICON -->
+                    <div class="rounded-3 p-2 flex-shrink-0
+                        {% if notification.notification_type == 'login' %}
+                            bg-primary-subtle text-primary
+                        {% else %}
+                            bg-success-subtle text-success
+                        {% endif %}">
 
-                            {% if notification.notification_type == "login" %}
+                        {% if notification.notification_type == "login" %}
+                            <i class="bi bi-box-arrow-in-right fs-5"></i>
+                        {% else %}
+                            <i class="bi bi-envelope fs-5"></i>
+                        {% endif %}
 
-                                <i class="bi bi-box-arrow-in-right fs-4"></i>
+                    </div>
 
-                            {% else %}
+                    <!-- CONTENT -->
+                    <div class="flex-grow-1 min-width-0" style="min-width: 0;">
 
-                                <i class="bi bi-envelope fs-4"></i>
+                        <!-- TITLE AND DATE -->
+                        <div class="d-flex flex-wrap justify-content-between
+                                    align-items-center gap-2 mb-1">
 
-                            {% endif %}
+                            <div class="d-flex align-items-center flex-wrap gap-2">
+
+                                <h3 class="h6 fw-semibold mb-0">
+                                    {{ notification.title }}
+                                </h3>
+
+                                {% if not notification.is_read %}
+                                    <span class="badge rounded-pill text-bg-primary">
+                                        Nueva
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+                            <span class="text-secondary small text-nowrap">
+                                {{ notification.created_at|date:"d/m/Y H:i" }}
+                            </span>
 
                         </div>
 
+                        <!-- MESSAGE -->
+                        <p class="text-secondary small text-truncate mb-2"
+                        title="{{ notification.message }}">
+                            {{ notification.message }}
+                        </p>
 
-                        <!-- CONTENT -->
-                        <div class="flex-grow-1">
+                        <!-- METADATA AND ACTIONS -->
+                        <div class="d-flex flex-wrap justify-content-between
+                                    align-items-center gap-2">
 
-                            <div class="d-flex flex-wrap
-                                        justify-content-between
-                                        align-items-start gap-2">
+                            <div class="d-flex flex-wrap align-items-center gap-3">
 
-                                <div>
+                                <span class="text-secondary small">
+                                    <i class="bi bi-person me-1"></i>
 
-                                    <div class="d-flex flex-wrap
-                                                align-items-center gap-2">
+                                    {% if notification.user %}
+                                        {{ notification.user.username }}
+                                    {% else %}
+                                        Visitante
+                                    {% endif %}
+                                </span>
 
-                                        <h3 class="h6 fw-bold mb-0">
-
-                                            {{ notification.title }}
-
-                                        </h3>
-
-
-                                        {% if not notification.is_read %}
-
-                                            <span class="badge text-bg-primary">
-                                                Nueva
-                                            </span>
-
-                                        {% endif %}
-
-                                    </div>
-
-
-                                    <p class="text-secondary mt-2 mb-2">
-
-                                        {{ notification.message }}
-
-                                    </p>
-
-                                </div>
-
-
-                                <span class="text-secondary small text-nowrap">
-
-                                    {{ notification.created_at|date:"d/m/Y H:i" }}
-
+                                <span class="text-secondary small">
+                                    <i class="bi bi-tag me-1"></i>
+                                    {{ notification.get_notification_type_display }}
                                 </span>
 
                             </div>
 
-
-                            <!-- DETAILS -->
-                            <div class="d-flex flex-wrap
-                                        justify-content-between
-                                        align-items-center gap-3 mt-2">
-
-                                <div class="d-flex flex-wrap gap-3">
-
-                                    <span class="text-secondary small">
-
-                                        <i class="bi bi-person me-1"></i>
-
-                                        {% if notification.user %}
-
-                                            {{ notification.user.username }}
-
-                                        {% else %}
-
-                                            Visitante
-
-                                        {% endif %}
-
-                                    </span>
-
-
-                                    <span class="text-secondary small">
-
-                                        <i class="bi bi-tag me-1"></i>
-
-                                        {{ notification.get_notification_type_display }}
-
-                                    </span>
-
-                                </div>
-
+                            <!-- ACTIONS -->
+                            <div class="d-flex align-items-center gap-2">
 
                                 {% if not notification.is_read %}
 
                                     <form method="post"
-                                          action="{% url 'accounts:mark_notification_read' notification.id %}">
+                                        action="{% url 'accounts:mark_notification_read' notification.id %}">
 
                                         {% csrf_token %}
 
                                         <button type="submit"
-                                                class="btn btn-sm
-                                                       btn-outline-secondary">
+                                                class="btn btn-sm btn-light border rounded-circle"
+                                                title="Marcar como leída"
+                                                aria-label="Marcar como leída">
 
-                                            <i class="bi bi-check2 me-1"></i>
-
-                                            Marcar como leída
+                                            <i class="bi bi-check2 text-success"></i>
 
                                         </button>
 
@@ -397,6 +368,14 @@
 
                                 {% endif %}
 
+                                <a href="{% url 'accounts:notification_detail' notification.pk %}"
+                                class="btn btn-sm btn-primary rounded-pill px-3">
+
+                                    <i class="bi bi-eye me-1"></i>
+                                    Detalle
+
+                                </a>
+
                             </div>
 
                         </div>
@@ -405,46 +384,38 @@
 
                 </div>
 
-            {% empty %}
+            </div>
 
-                <div class="text-center py-5 px-3">
+        {% empty %}
 
-                    <div class="mb-3">
+            <div class="text-center py-5 px-3">
 
-                        <i class="bi bi-bell-slash fs-1
-                                  text-secondary"></i>
-
-                    </div>
-
-                    <h3 class="h5 fw-bold">
-                        No hay notificaciones
-                    </h3>
-
-                    <p class="text-secondary mb-0">
-
-                        {% if filter_type == "unread" %}
-
-                            No tienes notificaciones pendientes.
-
-                        {% elif filter_type == "login" %}
-
-                            No se han registrado inicios de sesión.
-
-                        {% elif filter_type == "contact" %}
-
-                            Todavía no has recibido mensajes de contacto.
-
-                        {% else %}
-
-                            La actividad de tu aplicación aparecerá aquí.
-
-                        {% endif %}
-
-                    </p>
-
+                <div class="mb-3">
+                    <i class="bi bi-bell-slash fs-1 text-secondary"></i>
                 </div>
 
-            {% endfor %}
+                <h3 class="h5 fw-bold">
+                    No hay notificaciones
+                </h3>
+
+                <p class="text-secondary mb-0">
+
+                    {% if filter_type == "unread" %}
+                        No tienes notificaciones pendientes.
+                    {% elif filter_type == "login" %}
+                        No se han registrado inicios de sesión.
+                    {% elif filter_type == "contact" %}
+                        Todavía no has recibido mensajes de contacto.
+                    {% else %}
+                        La actividad de tu aplicación aparecerá aquí.
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+        {% endfor %}
+
 
         </div>
 

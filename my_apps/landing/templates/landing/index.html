@@ -476,19 +476,17 @@ Portafolio de Andres Reyes: Python, análisis de datos, SQL, redes y desarrollo 
                     <div class="card-body p-4 p-md-5">
                         <h3 class="h4 fw-bold mb-4">Envíame un mensaje</h3>
 
-                        <form method="post" action="#">
+                        <form method="POST" action="{% url 'landing:contact' %}">
                             {% csrf_token %}
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="nombre" class="form-label">
-                                        Nombre
-                                    </label>
+                                    <label for="nombre" class="form-label">Nombre</label>
                                     <input type="text"
-                                           class="form-control"
-                                           id="nombre"
-                                           name="nombre"
-                                           required>
+                                        class="form-control"
+                                        id="nombre"
+                                        name="name"
+                                        required>
                                 </div>
 
                                 <div class="col-md-6">
@@ -496,32 +494,28 @@ Portafolio de Andres Reyes: Python, análisis de datos, SQL, redes y desarrollo 
                                         Correo electrónico
                                     </label>
                                     <input type="email"
-                                           class="form-control"
-                                           id="email"
-                                           name="email"
-                                           required>
+                                        class="form-control"
+                                        id="email"
+                                        name="email"
+                                        required>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="asunto" class="form-label">
-                                        Asunto
-                                    </label>
+                                    <label for="asunto" class="form-label">Asunto</label>
                                     <input type="text"
-                                           class="form-control"
-                                           id="asunto"
-                                           name="asunto"
-                                           required>
+                                        class="form-control"
+                                        id="asunto"
+                                        name="subject"
+                                        required>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="mensaje" class="form-label">
-                                        Mensaje
-                                    </label>
+                                    <label for="mensaje" class="form-label">Mensaje</label>
                                     <textarea class="form-control"
-                                              id="mensaje"
-                                              name="mensaje"
-                                              rows="5"
-                                              required></textarea>
+                                            id="mensaje"
+                                            name="message"
+                                            rows="5"
+                                            required></textarea>
                                 </div>
 
                                 <div class="col-12">
@@ -533,11 +527,6 @@ Portafolio de Andres Reyes: Python, análisis de datos, SQL, redes y desarrollo 
                                 </div>
                             </div>
                         </form>
-
-                        <p class="small text-secondary mt-3 mb-0">
-                            El formulario requiere una vista Django para procesar
-                            los mensajes.
-                        </p>
                     </div>
                 </div>
             </div>

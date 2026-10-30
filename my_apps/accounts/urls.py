@@ -28,4 +28,9 @@ urlpatterns = [
         views.mark_all_notifications_read,
         name="mark_all_notifications_read",
     ),
+    path(
+        "staff/notificaciones/<int:pk>/eliminar/",
+        views.notification_detail,
+        name="notification_detail",
+    )
 ]
